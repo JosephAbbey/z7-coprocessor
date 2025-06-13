@@ -1,0 +1,26 @@
+header_action: add
+file_mode: opt-out
+
+untracked_files:
+  - bd/top/hdl/top_wrapper.vhd
+
+header: |
+  ---------------------------------------------------------------------------------
+  
+   Distributed under MIT Licence
+     See https://github.com/josephabbey/z7-coprocessor/blob/main/LICENCE.
+  
+  ---------------------------------------------------------------------------------
+
+# Group mulitple items by the comment value.
+file_associations_by_comment:
+  "#":
+    - ".tcl$"
+    - ".toml$"
+  "--":
+    - ".vhd$"
+    - ".vhdl$"
+# For files that have 'important' first lines (like bash), use this setting to move the header below that line.
+# Here, you can only negate items by their key.
+skip_lines_that_have:
+  ".sh$": ["#!"]

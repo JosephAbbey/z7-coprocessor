@@ -1,0 +1,28 @@
+name: Add header
+
+on:
+  push:
+
+jobs:
+  build:
+    name: Add headers
+    runs-on: ubuntu-latest
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+      actions: write
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Add header action step
+      uses: minituff/add-header-action@v1
+      env:
+        FORCE_COLOR: "1" # Optional: Shows color output in GitHub console.
+
+    - name: Commit and Push
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: Add headers
+        commit_options: '--no-verify --signoff'
+        skip_dirty_check: false
