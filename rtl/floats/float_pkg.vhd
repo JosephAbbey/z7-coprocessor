@@ -10,11 +10,41 @@ package float_pkg is
   function "-" (a    : my_float) return my_float;
   function "-" (a, b : my_float) return my_float;
 
+  function "*" (a, b : my_float) return my_float;
+
 end package float_pkg;
 
--- f32 = seeeeeeeemmmmmmmmmmmmmmmmmmmmmmm
+-- f32 = seeeeeeeemmmmmmmmmmmmmmmmmmmmmmm (1 sign bit, 8 exponent bits, 23 mantissa bits)
+-- ieee754 single precision floating point format
+
+-- normalisation:
+--   1. The exponent is stored with a bias of 127.
+--   2. The mantissa is stored without the leading 1, which is assumed to be there.
+-- special cases:
+--   1. Zero: 0 00000000 00000000000000000000000
+--   2. Infinity: 0 11111111 00000000000000000000000
+--   3. NaN: 0 11111111 10000000000000000000000 (or any other mantissa with exponent all ones)
 
 package body float_pkg is
+
+  function fill(val : STD_LOGIC; len : INTEGER) return STD_LOGIC_VECTOR is
+    variable result   : STD_LOGIC_VECTOR(len - 1 downto 0) := (others => val);
+  begin
+    return result;
+  end function;
+
+  constant zero_exp      : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+  constant ones_exp      : STD_LOGIC_VECTOR(7 downto 0) := (others => '1');
+
+  -- Decode inputs:
+  -- variable a_sign       : STD_LOGIC                     := a(31);
+  -- variable a_exp        : STD_LOGIC_VECTOR(7 downto 0)  := a(30 downto 23);
+  -- variable a_man        : STD_LOGIC_VECTOR(22 downto 0) := a(22 downto 0);
+  -- variable b_sign       : STD_LOGIC                     := b(31);
+  -- variable b_exp        : STD_LOGIC_VECTOR(7 downto 0)  := b(30 downto 23);
+  -- variable b_man        : STD_LOGIC_VECTOR(22 downto 0) := b(22 downto 0);
+
+  --#region "Addition and Subtraction (my own design and implementation)"
 
   function safe_add(a, b : my_float) return my_float is
     variable a_sign        : STD_LOGIC                     := a(31);
@@ -131,26 +161,9 @@ package body float_pkg is
     end if;
   end function safe_add;
 
-  function "+" (a, b    : my_float) return my_float is
-    variable a_sign       : STD_LOGIC                     := a(31);
-    variable a_exp        : STD_LOGIC_VECTOR(7 downto 0)  := a(30 downto 23);
-    variable a_man        : STD_LOGIC_VECTOR(22 downto 0) := a(22 downto 0);
-    variable b_sign       : STD_LOGIC                     := b(31);
-    variable b_exp        : STD_LOGIC_VECTOR(7 downto 0)  := b(30 downto 23);
-    variable b_man        : STD_LOGIC_VECTOR(22 downto 0) := b(22 downto 0);
-    variable exp          : UNSIGNED(7 downto 0)          := UNSIGNED(a_exp) - UNSIGNED(b_exp);
-
-    constant zero_exp     : STD_LOGIC_VECTOR(a_exp'range) := (others => '0');
-    constant ones_exp     : STD_LOGIC_VECTOR(a_exp'range) := (others => '1');
-
-    variable a_man_1      : UNSIGNED(23 downto 0);
-    variable b_man_1      : UNSIGNED(23 downto 0);
-
-    variable signed_man   : SIGNED(25 downto 0);
-
-    variable overflow_man : STD_LOGIC_VECTOR(24 downto 0);
-
-    variable output_sign  : STD_LOGIC;
+  function "+" (a, b : my_float) return my_float is
+    variable a_exp     : STD_LOGIC_VECTOR(7 downto 0) := a(30 downto 23);
+    variable b_exp     : STD_LOGIC_VECTOR(7 downto 0) := b(30 downto 23);
   begin
 
     -- Handle +-infinity and +-NaN
@@ -178,5 +191,65 @@ package body float_pkg is
   begin
     return a + (-b);
   end function "-";
+
+  --#endregion
+
+  --#region "Multiplication (my own design and implementation)"
+
+  function "*" (a, b : my_float) return my_float is
+    variable a_sign    : STD_LOGIC                     := a(31);
+    variable a_exp     : STD_LOGIC_VECTOR(7 downto 0)  := a(30 downto 23);
+    variable a_man     : STD_LOGIC_VECTOR(22 downto 0) := a(22 downto 0);
+    variable b_sign    : STD_LOGIC                     := b(31);
+    variable b_exp     : STD_LOGIC_VECTOR(7 downto 0)  := b(30 downto 23);
+    variable b_man     : STD_LOGIC_VECTOR(22 downto 0) := b(22 downto 0);
+
+    -- 1 bit for overflow (1 <= x,y < 2 so 1 <= x * y < 4), leading 1 is implicit, 24 bits for the mantissa
+    variable man_sum   : UNSIGNED(24 downto 0)         := UNSIGNED("01" & a_man);
+
+    variable sign      : STD_LOGIC                     := a_sign xor b_sign;
+    variable man       : STD_LOGIC_VECTOR(22 downto 0);
+    variable exp       : UNSIGNED(7 downto 0) := UNSIGNED(a_exp) + UNSIGNED(b_exp) - "01111111"; -- Subtract the bias of 127
+  begin
+
+    -- TODO: denormalized numbers
+
+    -- Handle +-infinity and +-NaN
+    if a_exp = ones_exp then
+      return sign & a(30 downto 0);
+    end if;
+    if b_exp = ones_exp then
+      return sign & b(30 downto 0);
+    end if;
+
+    -- a1 * 2^a2 * b1 * 2^b2 = (a1 * b1) * 2^(a2 + b2) = (a1 * b1) * 2^(a2 + b2)
+
+    -- a1 * b1 is the sum of a1 bit shifted to all of the bits in b1 that are 1
+
+    G1 : for I in 0 to 22 loop
+      if b_man(22 - I) = '1' then
+        man_sum := man_sum + UNSIGNED(fill('0', I + 1) & '1' & a_man(22 downto I + 1));
+      else
+        man_sum := man_sum;
+      end if;
+    end loop;
+
+    -- Handle overflow
+    if man_sum(24) = '1' then
+      -- If the mantissa overflows, shift it right and increment the exponent
+      -- we check for the leading 1, so we can safely take the 23 bits and omit the leading 1
+      man := STD_LOGIC_VECTOR(man_sum(23 downto 1));
+      exp := exp + 1;
+    else
+      -- If the mantissa does not overflow, just take the lower
+      -- there will always be a leading 1, so we can safely take the lower 23 bits
+      man := STD_LOGIC_VECTOR(man_sum(22 downto 0));
+    end if;
+
+    return sign & STD_LOGIC_VECTOR(exp) & man;
+
+  end function "*";
+
+  --#endregion
 
 end package body float_pkg;

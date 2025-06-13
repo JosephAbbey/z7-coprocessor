@@ -23,7 +23,11 @@
 #define FLOAT_ADDER_BASEADDR_B XPAR_FLOAT_ADDER_0_BASEADDR + 4
 #define FLOAT_ADDER_BASEADDR_O XPAR_FLOAT_ADDER_0_BASEADDR + 8
 
-union int_float { int i; float f; };
+#define FLOAT_MULTIPLIER_BASEADDR_A XPAR_FLOAT_MULTIPLIER_0_BASEADDR
+#define FLOAT_MULTIPLIER_BASEADDR_B XPAR_FLOAT_MULTIPLIER_0_BASEADDR + 4
+#define FLOAT_MULTIPLIER_BASEADDR_O XPAR_FLOAT_MULTIPLIER_0_BASEADDR + 8
+
+union int_float { u32 i; float f; };
 #define to_bits(x) ((union int_float){ .f = x }.i)
 #define to_float(x) ((union int_float){ .i = x }.f)
 
@@ -54,9 +58,17 @@ int main() {
 
     //     usleep(10000);
     // }
-
+    
     float a = 2.0f;
     float b = 10.0f;
+
+    xil_printf("##########################################################\r\n");
+    xil_printf("#\r\n");
+    xil_printf("# ADDER: \r\n");
+    xil_printf("#\r\n");
+    xil_printf("##########################################################\r\n");
+    xil_printf("\r\n");
+
     xil_printf("On ARM:\r\n");
     xil_printf("A: %x\t", to_bits(a));
     xil_printf("B: %x\t", to_bits(b));
@@ -72,4 +84,56 @@ int main() {
     xil_printf("O: %x\t", Xil_In32(FLOAT_ADDER_BASEADDR_O));
     // xil_printf("O: %x\t", to_bits(to_float(Xil_In32(FLOAT_ADDER_BASEADDR_A)) + to_float(Xil_In32(FLOAT_ADDER_BASEADDR_B))));
     xil_printf("\r\n");
+
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+
+    xil_printf("##########################################################\r\n");
+    xil_printf("#\r\n");
+    xil_printf("# MULTIPLIER: \r\n");
+    xil_printf("#\r\n");
+    xil_printf("##########################################################\r\n");
+    xil_printf("\r\n");
+    
+    xil_printf("On ARM:\r\n");
+    xil_printf("A: %x\t", to_bits(a));
+    xil_printf("B: %x\t", to_bits(b));
+    xil_printf("O: %x\t", to_bits(a * b));
+    xil_printf("\r\n");
+
+    Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_A, to_bits(a));
+    Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_B, to_bits(b));
+
+    xil_printf("On FPGA:\r\n");
+    xil_printf("A: %x\t", Xil_In32(FLOAT_MULTIPLIER_BASEADDR_A));
+    xil_printf("B: %x\t", Xil_In32(FLOAT_MULTIPLIER_BASEADDR_B));
+    xil_printf("O: %x\t", Xil_In32(FLOAT_MULTIPLIER_BASEADDR_O));
+    xil_printf("\r\n");
+    
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+
+    // u32 o, ans;
+    // float af, bf;
+    // for (u32 a = 1; a < 0xffffffff; a++) {
+    //     af = to_float(a);
+    //     xil_printf("%x\r\n", a);
+    //     for (u32 b = 0; b < 0xffffffff; b++) {
+    //         bf = to_float(b);
+    //         Xil_Out32(FLOAT_ADDER_BASEADDR_A, a);
+    //         Xil_Out32(FLOAT_ADDER_BASEADDR_B, b);
+    //         o = Xil_In32(FLOAT_ADDER_BASEADDR_O);
+    //         ans = to_bits(af + bf);
+    //         if (o != ans) {
+    //             xil_printf("%x + %x != %x = %x\r\n", a, b, o, ans);
+    //         }
+    //     }
+    // }
+    // xil_printf("done");
 }
