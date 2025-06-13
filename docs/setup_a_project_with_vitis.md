@@ -1,3 +1,8 @@
+<!-- --------------------------------------------------------------------------------- -->
+<!--  Distributed under MIT Licence -->
+<!--    See https://github.com/josephabbey/z7-coprocessor/blob/main/LICENCE. -->
+<!-- --------------------------------------------------------------------------------- -->
+
 # Using Vivado and Vitis
 
 ## New Project Wizard

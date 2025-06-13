@@ -1,3 +1,8 @@
+# ---------------------------------------------------------------------------------
+#  Distributed under MIT Licence
+#    See https://github.com/josephabbey/z7-coprocessor/blob/main/LICENCE.
+# ---------------------------------------------------------------------------------
+
 # Export the project to a TCL script
 write_project_tcl -use_bd_files -force {D:/repos/z7-coprocessor/project/coprocessor.tcl}
 

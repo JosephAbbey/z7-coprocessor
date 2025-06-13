@@ -1,3 +1,8 @@
+# ---------------------------------------------------------------------------------
+#  Distributed under MIT Licence
+#    See https://github.com/josephabbey/z7-coprocessor/blob/main/LICENCE.
+# ---------------------------------------------------------------------------------
+
 standard = "2008"
 [libraries]
 # xpm = { files = ["S:/Xilinx/Vivado/2023.2/data/vhdl/src/xpm/*.vhd"] }
