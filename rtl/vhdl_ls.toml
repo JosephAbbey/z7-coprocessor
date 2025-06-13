@@ -1,0 +1,6 @@
+standard = "2008"
+[libraries]
+# xpm = { files = ["S:/Xilinx/Vivado/2023.2/data/vhdl/src/xpm/*.vhd"] }
+ieee = { files = [
+  "S:/Xilinx/Vivado/2023.2/data/vhdl/src/ieee_2008/*.vhdl",
+], thirdparty = true }

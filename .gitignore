@@ -1,0 +1,16 @@
+project/**/*
+!project/coprocessor.tcl
+
+bd/top/*
+!bd/top/top.bd
+!bd/top/hdl/
+
+vitis/**/*
+!vitis/app_component/
+!vitis/app_component/_ide
+!vitis/app_component/_ide/.theia
+!vitis/app_component/_ide/.theia/launch.json
+!vitis/app_component/src/
+!vitis/app_component/src/main.c
+!vitis/platform/
+!vitis/platform/.gitkeep
