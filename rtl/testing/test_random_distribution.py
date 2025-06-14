@@ -1,3 +1,8 @@
+# ---------------------------------------------------------------------------------
+#  Distributed under MIT Licence
+#    See https://github.com/josephabbey/z7-coprocessor/blob/main/LICENCE.
+# ---------------------------------------------------------------------------------
+
 import matplotlib.pyplot as plt
 
 def ieee745(N): # ieee-745 bits (max 32 bit)

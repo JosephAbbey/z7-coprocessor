@@ -1,3 +1,8 @@
+-- ---------------------------------------------------------------------------------
+--  Distributed under MIT Licence
+--    See https://github.com/josephabbey/z7-coprocessor/blob/main/LICENCE.
+-- ---------------------------------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
