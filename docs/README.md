@@ -15,6 +15,8 @@ The Architecture is simple. The PS is connected to the PL via the AXI bus. All o
 
 ![Full Architecture](images/architecture.png)
 
+![Device Usage](images/device_usage.png)
+
 ## Floating Point Implementations
 
 Compliant with the IEEE 754 standard, single precision (32-bit) floating point numbers.
