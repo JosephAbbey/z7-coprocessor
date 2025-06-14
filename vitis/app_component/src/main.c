@@ -13,19 +13,27 @@
 #define LEDS_MASK 0b1111
 #define SWS_MASK 0b1111
 
+#define OPPERATION_A 0
+#define OPPERATION_B 4
+#define OPPERATION_O 8
+
 #define ADDER_BASEADDR XPAR_INTEGER_ADDER_0_BASEADDR
+#define ADDER_BASEADDR_A ADDER_BASEADDR + OPPERATION_A
+#define ADDER_BASEADDR_B ADDER_BASEADDR + OPPERATION_B
+#define ADDER_BASEADDR_O ADDER_BASEADDR + OPPERATION_O
 
-#define ADDER_BASEADDR_A XPAR_INTEGER_ADDER_0_BASEADDR
-#define ADDER_BASEADDR_B XPAR_INTEGER_ADDER_0_BASEADDR + 4
-#define ADDER_BASEADDR_O XPAR_INTEGER_ADDER_0_BASEADDR + 8
+#define FLOAT_ADDER_BASEADDR XPAR_FLOAT_ADDER_0_BASEADDR
+#define FLOAT_ADDER_BASEADDR_A FLOAT_ADDER_BASEADDR + OPPERATION_A
+#define FLOAT_ADDER_BASEADDR_B FLOAT_ADDER_BASEADDR + OPPERATION_B
+#define FLOAT_ADDER_BASEADDR_O FLOAT_ADDER_BASEADDR + OPPERATION_O
 
-#define FLOAT_ADDER_BASEADDR_A XPAR_FLOAT_ADDER_0_BASEADDR
-#define FLOAT_ADDER_BASEADDR_B XPAR_FLOAT_ADDER_0_BASEADDR + 4
-#define FLOAT_ADDER_BASEADDR_O XPAR_FLOAT_ADDER_0_BASEADDR + 8
+#define FLOAT_MULTIPLIER_BASEADDR XPAR_FLOAT_MULTIPLIER_0_BASEADDR
+#define FLOAT_MULTIPLIER_BASEADDR_A FLOAT_MULTIPLIER_BASEADDR + OPPERATION_A
+#define FLOAT_MULTIPLIER_BASEADDR_B FLOAT_MULTIPLIER_BASEADDR + OPPERATION_B
+#define FLOAT_MULTIPLIER_BASEADDR_O FLOAT_MULTIPLIER_BASEADDR + OPPERATION_O
 
-#define FLOAT_MULTIPLIER_BASEADDR_A XPAR_FLOAT_MULTIPLIER_0_BASEADDR
-#define FLOAT_MULTIPLIER_BASEADDR_B XPAR_FLOAT_MULTIPLIER_0_BASEADDR + 4
-#define FLOAT_MULTIPLIER_BASEADDR_O XPAR_FLOAT_MULTIPLIER_0_BASEADDR + 8
+#define FLOAT_RANDOM_BASEADDR XPAR_FLOAT_RANDOM_0_BASEADDR
+#define FLOAT_RANDOM_BASEADDR_O FLOAT_RANDOM_BASEADDR + OPPERATION_O
 
 union int_float { u32 i; float f; };
 #define to_bits(x) ((union int_float){ .f = x }.i)
@@ -118,6 +126,35 @@ int main() {
     xil_printf("\r\n");
     xil_printf("\r\n");
     xil_printf("\r\n");
+
+    xil_printf("##########################################################\r\n");
+    xil_printf("#\r\n");
+    xil_printf("# RANDOM: \r\n");
+    xil_printf("#\r\n");
+    xil_printf("##########################################################\r\n");
+    xil_printf("\r\n");
+
+    xil_printf("On FPGA:\r\n");
+    xil_printf("O: %x\r\n", Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    xil_printf("O: %x\r\n", Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    xil_printf("O: %x\r\n", Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    xil_printf("O: %x\r\n", Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    xil_printf("O: %x\r\n", Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    xil_printf("O: %x\r\n", Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    xil_printf("O: %x\r\n", Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    xil_printf("O: %x\r\n", Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    xil_printf("O: %x\r\n", Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    xil_printf("O: %x\r\n", Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+
+    // for (int i = 0; i < 100000; i++) {
+    //     xil_printf("%x\r\n", Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    // }
 
     // u32 o, ans;
     // float af, bf;

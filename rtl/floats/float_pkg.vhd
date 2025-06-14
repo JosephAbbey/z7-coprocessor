@@ -38,9 +38,6 @@ package body float_pkg is
     return result;
   end function;
 
-  constant zero_exp      : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
-  constant ones_exp      : STD_LOGIC_VECTOR(7 downto 0) := (others => '1');
-
   -- Decode inputs:
   -- variable a_sign       : STD_LOGIC                     := a(31);
   -- variable a_exp        : STD_LOGIC_VECTOR(7 downto 0)  := a(30 downto 23);
@@ -60,9 +57,6 @@ package body float_pkg is
     variable b_man         : STD_LOGIC_VECTOR(22 downto 0) := b(22 downto 0);
     variable exp           : UNSIGNED(7 downto 0)          := UNSIGNED(a_exp) - UNSIGNED(b_exp);
 
-    constant zero_exp      : STD_LOGIC_VECTOR(a_exp'range) := (others => '0');
-    constant ones_exp      : STD_LOGIC_VECTOR(a_exp'range) := (others => '1');
-
     variable a_man_1       : UNSIGNED(23 downto 0);
     variable b_man_1       : UNSIGNED(23 downto 0);
 
@@ -76,13 +70,15 @@ package body float_pkg is
     -- Underflow:
     --   If the exponent has minimum value (all zero), special rules for denormalized values are followed.
     --   The exponent value is set to 2-126 and the "invisible" leading bit for the mantissa is no longer used.
-    if a_exp = zero_exp then
+    if a_exp = fill('0', 8) then
       a_man_1 := UNSIGNED('0' & a_man);
+      a_exp   := "00000001"; -- Set exponent to 2-126
     else
       a_man_1 := UNSIGNED('1' & a_man);
     end if;
-    if b_exp = zero_exp then
+    if b_exp = fill('0', 8) then
       b_man_1 := UNSIGNED('0' & b_man);
+      b_exp   := "00000001"; -- Set exponent to 2-126
     else
       b_man_1 := UNSIGNED('1' & b_man);
     end if;
@@ -144,7 +140,9 @@ package body float_pkg is
       end if;
     end if;
 
-    -- TODO: Handle 0
+    if overflow_man = fill('0', 25) then
+      return (others => '0'); -- Return zero if the result is zero
+    end if;
 
     if overflow_man(24) = '1' then
       -- If the output requires a lower exponent to be normalised
@@ -172,10 +170,10 @@ package body float_pkg is
   begin
 
     -- Handle +-infinity and +-NaN
-    if a_exp = ones_exp then
+    if a_exp = fill('1', 8) then
       return a;
     end if;
-    if b_exp = ones_exp then
+    if b_exp = fill('1', 8) then
       return b;
     end if;
 
@@ -220,10 +218,10 @@ package body float_pkg is
     -- TODO: denormalized numbers
 
     -- Handle +-infinity and +-NaN
-    if a_exp = ones_exp then
+    if a_exp = fill('1', 8) then
       return sign & a(30 downto 0);
     end if;
-    if b_exp = ones_exp then
+    if b_exp = fill('1', 8) then
       return sign & b(30 downto 0);
     end if;
 
