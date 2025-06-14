@@ -131,6 +131,8 @@ begin
       else
         lfsr_i := lfsr;
         G1 : for i in 0 to 22 loop
+          --                               27 and 24 here correspond to the taps in the LFSR
+          --                               from the powers 28 and 25.
           lfsr_i := lfsr_i(26 downto 0) & (lfsr_i(27) xor lfsr_i(24));
           rnd(i) <= lfsr_i(0);
         end loop G1;
@@ -140,7 +142,7 @@ begin
   end process;
 
   -- Convert the LFSR output to a floating-point number
-  -- Subtracting 1 to ensure the result is in the range [0, 1),
+  -- Subtracting 1 to ensure the result is in the range (0, 1],
   -- this should get minimized away to very little extra logic.
   --                       sign +  exponent  + mantissa
   slv_reg2      <= (my_float("0" & "01111111" & rnd) - one);

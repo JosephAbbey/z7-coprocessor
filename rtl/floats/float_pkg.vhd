@@ -55,7 +55,7 @@ package body float_pkg is
     variable b_sign        : STD_LOGIC                     := b(31);
     variable b_exp         : STD_LOGIC_VECTOR(7 downto 0)  := b(30 downto 23);
     variable b_man         : STD_LOGIC_VECTOR(22 downto 0) := b(22 downto 0);
-    variable exp           : UNSIGNED(7 downto 0)          := UNSIGNED(a_exp) - UNSIGNED(b_exp);
+    variable exp_diff      : UNSIGNED(7 downto 0)          := UNSIGNED(a_exp) - UNSIGNED(b_exp);
 
     variable a_man_1       : UNSIGNED(23 downto 0);
     variable b_man_1       : UNSIGNED(23 downto 0);
@@ -86,14 +86,14 @@ package body float_pkg is
     if a_sign = b_sign then
       -- Simple addition case and maintain the sign
       output_sign := a_sign;
-      if exp = 0 then
+      if exp_diff = 0 then
         overflow_man := STD_LOGIC_VECTOR(('0' & b_man_1) + ('0' & a_man_1));
       else
         -- Shift the mantissa so that both a and b have the same exponent
-        overflow_man := STD_LOGIC_VECTOR(('0' & shift_right(b_man_1, TO_INTEGER(exp))) + ('0' & a_man_1));
+        overflow_man := STD_LOGIC_VECTOR(('0' & shift_right(b_man_1, TO_INTEGER(exp_diff))) + ('0' & a_man_1));
       end if;
     elsif a_sign = '1' then
-      if exp = 0 then
+      if exp_diff = 0 then
         signed_man := SIGNED("00" & b_man_1) - SIGNED("00" & a_man_1);
         -- Convert twos compliment into sign and magnitude
         if signed_man(25) = '1' then
@@ -105,7 +105,7 @@ package body float_pkg is
         end if;
       else
         -- Shift the mantissa so that both a and b have the same exponent
-        signed_man := SIGNED("00" & shift_right(b_man_1, TO_INTEGER(exp))) - SIGNED("00" & a_man_1);
+        signed_man := SIGNED("00" & shift_right(b_man_1, TO_INTEGER(exp_diff))) - SIGNED("00" & a_man_1);
         -- Convert twos compliment into sign and magnitude
         if signed_man(25) = '1' then
           output_sign  := '1';
@@ -116,7 +116,7 @@ package body float_pkg is
         end if;
       end if;
     else
-      if exp = 0 then
+      if exp_diff = 0 then
         signed_man := SIGNED("00" & a_man_1) - SIGNED("00" & b_man_1);
         -- Convert twos compliment into sign and magnitude
         if signed_man(25) = '1' then
@@ -128,7 +128,7 @@ package body float_pkg is
         end if;
       else
         -- Convert twos compliment into sign and magnitude
-        signed_man := SIGNED("00" & a_man_1) - SIGNED("00" & shift_right(b_man_1, TO_INTEGER(exp)));
+        signed_man := SIGNED("00" & a_man_1) - SIGNED("00" & shift_right(b_man_1, TO_INTEGER(exp_diff)));
         -- Convert twos compliment into sign and magnitude
         if signed_man(25) = '1' then
           output_sign  := '1';
@@ -138,10 +138,6 @@ package body float_pkg is
           overflow_man := STD_LOGIC_VECTOR(signed_man(24 downto 0));
         end if;
       end if;
-    end if;
-
-    if overflow_man = fill('0', 25) then
-      return (others => '0'); -- Return zero if the result is zero
     end if;
 
     if overflow_man(24) = '1' then
@@ -217,6 +213,11 @@ package body float_pkg is
 
     -- TODO: denormalized numbers
 
+    -- Handle zero
+    if a(30 downto 0) = fill('0', 31) or a(30 downto 0) = fill('0', 31) then
+      return fill('0', 32);
+    end if;
+
     -- Handle +-infinity and +-NaN
     if a_exp = fill('1', 8) then
       return sign & a(30 downto 0);
@@ -229,6 +230,8 @@ package body float_pkg is
 
     -- a1 * b1 is the sum of a1 bit shifted to all of the bits in b1 that are 1
 
+    -- Long multiplication of the mantissa
+    -- We start with the leading 1 in the variable already.
     G1 : for I in 0 to 22 loop
       if b_man(22 - I) = '1' then
         man_sum := man_sum + UNSIGNED(fill('0', I + 1) & '1' & a_man(22 downto I + 1));

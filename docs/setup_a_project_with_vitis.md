@@ -185,11 +185,15 @@
 
     ![New Application 5](images/45.png)
 
-46. Create a new file called `main.c`.
+46. In `launch.json`, under `Settings`, change the `Bitstream file` to the path of your bitstream file. This is usually in the `project_name.runs/impl_1/` directory, and use `${workspaceFolder}` to make it relative.
 
-    ![New File](images/46.png)
+    ![Launch JSON](images/46.png)
 
-47. Copy and paste the following code into `main.c`.
+47. Create a new file called `main.c`.
+
+    ![New File](images/47.png)
+
+48. Copy and paste the following code into `main.c`.
 
     ```c
     #include "xparameters.h"
@@ -219,39 +223,39 @@
     }
     ```
 
-    ![Main Code](images/47.png)
+    ![Main Code](images/48.png)
 
-48. Click `Build`.
+49. Click `Build`.
 
-    ![Build Application](images/48.png)
+    ![Build Application](images/49.png)
 
-49. Set the board jumpers to enable host and boot from JTAG. Connect the board to your computer.
+50. Set the board jumpers to enable host and boot from JTAG. Connect the board to your computer.
 
-    ![Board Jumpers](images/49.jpg)
+    ![Board Jumpers](images/50.jpg)
 
-50. Click `Run`.
+51. Click `Run`.
 
-    ![Run Application](images/50.png)
+    ![Run Application](images/51.png)
 
     Now the LEDs on the board should be counting up in binary. You will notice that even though we are logging data in the code, nothing is printed in the debug console (who knows why?), to see the logs, use the serial monitor. Press `F1` and search for `Serial Monitor`, then select the port and use `115200` as the baud rate.
 
-51. Now go back to the block design and add an AXI GPIO for the buttons.
+52. Now go back to the block design and add an AXI GPIO for the buttons.
 
-    ![Add AXI GPIO 2](images/51.png)
+    ![Add AXI GPIO 2](images/52.png)
 
-52. Click `Generate Block Design` again.
+53. Click `Generate Block Design` again.
 
-53. Click `Generate Bitstream` again.
+54. Click `Generate Bitstream` again.
 
-54. Export the hardware again (you can overwrite the previous .xsa file).
+55. Export the hardware again (you can overwrite the previous .xsa file).
 
-55. In Vitis, update the platform. Open `vitis-comp.json` and click `Switch XSA`. Select your new .xsa file.
+56. In Vitis, update the platform. Open `vitis-comp.json` and click `Switch XSA`. Select your new .xsa file.
 
-    ![Update Platform](images/55.png)
+    ![Update Platform](images/56.png)
 
-56. Click `Build` in the platform component.
+57. Click `Build` in the platform component.
 
-57. Update the application component `main.c` file. Click `Build`. Click `Run`.
+58. Update the application component `main.c` file. Click `Build`. Click `Run`.
 
     ```c
     #include "xparameters.h"
