@@ -3009,7 +3009,7 @@
       },
       "float_random_0": {
         "vlnv": "xilinx.com:module_ref:float_random:1.0",
-        "ip_revision": "1749860726",
+        "ip_revision": "1749906927",
         "xci_name": "top_float_random_0_0",
         "xci_path": "ip\\top_float_random_0_0\\top_float_random_0_0.xci",
         "inst_hier_path": "float_random_0",
@@ -3401,18 +3401,18 @@
               },
               "SEG_float_multiplier_0_reg0": {
                 "address_block": "/float_multiplier_0/S_AXI/reg0",
-                "offset": "0x48000000",
-                "range": "128M"
+                "offset": "0x50000000",
+                "range": "256M"
               },
               "SEG_float_random_0_reg0": {
                 "address_block": "/float_random_0/S_AXI/reg0",
-                "offset": "0x44000000",
-                "range": "64M"
+                "offset": "0x48000000",
+                "range": "128M"
               },
               "SEG_integer_adder_0_reg0": {
                 "address_block": "/integer_adder_0/S_AXI/reg0",
-                "offset": "0x50000000",
-                "range": "256M"
+                "offset": "0x44000000",
+                "range": "64M"
               }
             }
           }

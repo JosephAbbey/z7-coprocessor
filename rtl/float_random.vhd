@@ -97,9 +97,12 @@ architecture arch_imp of float_random is
   signal byte_index          : INTEGER;
   signal aw_en               : STD_LOGIC;
 
-  signal lfsr                : STD_LOGIC_VECTOR(22 downto 0) := "00000000000000000000001";
+  constant lfsr_init         : STD_LOGIC_VECTOR(27 downto 0) := "0000000000000000000000000001";
+  signal lfsr                : STD_LOGIC_VECTOR(27 downto 0) := lfsr_init;
 
-  constant one               : my_float                      := "00111111100000000000000000000000"; -- 1.0 in IEEE 754 single precision
+  signal rnd                 : STD_LOGIC_VECTOR(22 downto 0);
+
+  constant one               : my_float := "00111111100000000000000000000000"; -- 1.0 in IEEE 754 single precision
 
 begin
 
@@ -111,17 +114,27 @@ begin
 
   -- Random numbers between 0 and 1:
   -- - sign is always 0
-  -- - exponent is always 0 to make it denormalized
+  -- - exponent is always 01111111 (127 in decimal, which is 0 + bias)
   -- - mantissa is a random string of 23 bits
 
+  -- Using LFSR tables from https://www.physics.otago.ac.nz/reports/electronics/ETR2012-1.pdf
+  -- n=28; LFSR 2: 28, 25; LFSR 4: 28, 27, 24, 22;
+
+  -- Better randomness can be achieved by using a bigger LFSR and taking the lower bits.
+
   process (S_AXI_ACLK)
+    variable lfsr_i : STD_LOGIC_VECTOR(27 downto 0);
   begin
     if rising_edge(S_AXI_ACLK) then
       if S_AXI_ARESETN = '0' then
-        lfsr <= "00000000000000000000001";
+        lfsr <= lfsr_init;
       else
-        -- Xorshift LFSR implementation
-        lfsr <= lfsr(21 downto 0) & (lfsr(22) xor lfsr(21) xor lfsr(20) xor lfsr(19));
+        lfsr_i := lfsr;
+        G1 : for i in 0 to 22 loop
+          lfsr_i := lfsr_i(26 downto 0) & (lfsr_i(27) xor lfsr_i(24));
+          rnd(i) <= lfsr_i(0);
+        end loop G1;
+        lfsr <= lfsr_i;
       end if;
     end if;
   end process;
@@ -130,7 +143,7 @@ begin
   -- Subtracting 1 to ensure the result is in the range [0, 1),
   -- this should get minimized away to very little extra logic.
   --                       sign +  exponent  + mantissa
-  slv_reg2      <= my_float("0" & "01111111" & lfsr) - one;
+  slv_reg2      <= (my_float("0" & "01111111" & rnd) - one);
 
   -- I/O Connections assignments
 

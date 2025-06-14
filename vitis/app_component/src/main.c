@@ -152,7 +152,7 @@ int main() {
     xil_printf("\r\n");
     xil_printf("\r\n");
 
-    // for (int i = 0; i < 100000; i++) {
+    // for (int i = 0; i < 26000; i++) {
     //     xil_printf("%x\r\n", Xil_In32(FLOAT_RANDOM_BASEADDR_O));
     // }
 

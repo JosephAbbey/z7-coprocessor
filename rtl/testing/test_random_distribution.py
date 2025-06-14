@@ -22,4 +22,6 @@ with open("./nums.txt", "r") as file:
     # convert hex representation of ieee 754 f32 to decimal
     nums = [ieee745(bin(int(hex_num, 16))[2:].rjust(32, "0")) for hex_num in hex_nums]
     plt.hist(nums, bins=50)
+    plt.savefig("./random_distribution.png")
     plt.show()
+    plt.close()
