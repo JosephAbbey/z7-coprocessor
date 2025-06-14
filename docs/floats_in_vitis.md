@@ -1,3 +1,8 @@
+<!-- --------------------------------------------------------------------------------- -->
+<!--  Distributed under MIT Licence -->
+<!--    See https://github.com/josephabbey/z7-coprocessor/blob/main/LICENCE. -->
+<!-- --------------------------------------------------------------------------------- -->
+
 # Floats in Vitis
 
 Vitis supports floating-point operations, but there are some considerations to keep in mind. Vitis has its own version of printf which does not support floating-point numbers. You can get around this by printing a hexadecimal representation of the floating-point number.
