@@ -17,6 +17,8 @@ The Architecture is simple. The PS is connected to the PL via the AXI bus. All o
 
 ![Device Usage](images/device_usage.png)
 
+![Device Usage Key](images/device_usage_key.png)
+
 ## Floating Point Implementations
 
 Compliant with the IEEE 754 standard, single precision (32-bit) floating point numbers.
@@ -34,7 +36,7 @@ $$
 *This is my own design and implementation, this is not standard and not the most efficient.*
 
 $$
-a_m \times 2^{a_e} + b_m \times 2^{b_e} = (a_m + \frac{b_m}{2^{a_e - b_e}}) \times 2^{a_e}
+a_m \times 2^{a_e} + b_m \times 2^{b_e} = \left(a_m + \frac{b_m}{2^{a_e - b_e}}\right) \times 2^{a_e}
 $$
 
 1. Decide the exponent, as we want to maintain accuracy, we use the larger exponent and drop the least significant bits, not the most significant bits.
@@ -69,14 +71,38 @@ $$
 1. Add the exponents together, use unsigned arithmetic and subtract 127, due to the bias in the exponent representation.
 2. Multiply the mantissas together using long multiplication. NB: Add the implicit leading 1 to the mantissas.
 3. The resulting mantissa will either have one bit overflow, or already be normalised. If it has overflowed, shift the mantissa to the right and increment the exponent.
-4. THe resulting sign is the XOR of the two signs.
+4. The resulting sign is the XOR of the two signs.
 
 Special cases:
+
 - If either number is NaN, return NaN.
 - If either number is infinity, return infinity.
 - If either number is zero, return zero.
 
+### Divider
+
+*This is my own design and implementation, this is not standard and not the most efficient.*
+
+$$
+\frac{a_m \times 2^{a_e}}{b_m \times 2^{b_e}} = \frac{a_m}{b_m} \times \frac{2^{a_e}}{2^{b_e}} = \frac{a_m}{b_m} \times 2^{a_e - b_e}
+$$
+
+1. Subtract the exponents, add back 127, due to the bias in the exponent representation.
+2. Divide the mantissas using long division over several clock cycles due to timing (this models quite nicely as you can just generate $n$ binary places per cycle in a pipeline). NB: Add the implicit leading 1 to the mantissas.
+3. Normalise the mantissa as above.
+4. The resulting sign is the XOR of the two signs.
+
+Special cases:
+
+- If either number is NaN, return NaN.
+- If the dividend is infinity, return infinity.
+- If the divisor is infinity, return zero.
+- If the dividend is zero, return zero.
+- If the divisor is zero, return NaN.
+
 ### Random Number Generator
+
+*This is my own design and implementation, this is not standard and not the most efficient.* However, I do not take credit for the concept, this has been a standard method of generating pseudo-random numbers in hardware for a long time.
 
 A simple linear feedback shift register (LFSR) based random number generator.
 
@@ -95,3 +121,11 @@ The random number is quite uniform, but not perfectly random. The distribution i
 ![Random Distribution](images/random_distribution.png)
 
 NB: This will never return 0, NaN, or infinity.
+
+### Square Root
+
+Using Heron's method (also known as the Babylonian method).
+
+$$
+\displaystyle x_{n+1}=\frac {1}{2}\left(x_{n}+{\frac {S}{x_{n}}}\right)
+$$

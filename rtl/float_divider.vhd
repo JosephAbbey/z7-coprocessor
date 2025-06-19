@@ -7,8 +7,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 library work;
+use work.float_pkg.all;
 
-entity float_random is
+entity float_divider is
   port (
     -- Global Clock Signal
     S_AXI_ACLK    : in  STD_LOGIC;
@@ -59,9 +60,9 @@ entity float_random is
     -- accept the read data and response information.
     S_AXI_RREADY  : in  STD_LOGIC
   );
-end float_random;
+end float_divider;
 
-architecture arch_imp of float_random is
+architecture arch_imp of float_divider is
 
   -- AXI4LITE signals
   signal axi_awaddr          : STD_LOGIC_VECTOR(31 downto 0);
@@ -96,13 +97,24 @@ architecture arch_imp of float_random is
   signal byte_index          : INTEGER;
   signal aw_en               : STD_LOGIC;
 
+  signal reg2_invalid_cnt    : UNSIGNED(2 downto 0) := "000";
+  signal hold_for_slv_reg2   : STD_LOGIC            := '0';
+
+  constant pipeline_depth    : INTEGER              := 6;
+
 begin
 
-  rnd_inst : entity work.random
+  -- bit of a waste of a pipeline divider
+  divider_inst : entity work.pipeline_divider
+    generic map(
+      pipeline_depth => pipeline_depth
+    )
     port map(
       clk => S_AXI_ACLK,
       rst => not S_AXI_ARESETN,
-      rnd => slv_reg2
+      a   => slv_reg0,
+      b   => slv_reg1,
+      q   => slv_reg2
     );
 
   -- I/O Connections assignments
@@ -200,12 +212,23 @@ begin
   begin
     if rising_edge(S_AXI_ACLK) then
       if S_AXI_ARESETN = '0' then
-        slv_reg0 <= (others => '0');
-        slv_reg1 <= (others => '0');
-        -- slv_reg2 <= (others => '0');
-        slv_reg3 <= (others => '0');
+        slv_reg0         <= (others => '0');
+        slv_reg1         <= (others => '0');
+        -- slv_reg2         <= (others => '0');
+        slv_reg3         <= (others => '0');
+
+        reg2_invalid_cnt <= "000";
       else
         loc_addr := axi_awaddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB);
+
+        -- If a or b are written to, reset the invalid counter for a new calculation
+        if slv_reg_wren = '1' and (loc_addr = "00" or loc_addr = "01") then
+          -- new operands, start 5-cycle invalid window
+          reg2_invalid_cnt <= to_unsigned(pipeline_depth + 1, 3);
+        elsif STD_LOGIC_VECTOR(reg2_invalid_cnt) /= "000" then
+          reg2_invalid_cnt <= reg2_invalid_cnt - 1;
+        end if;
+
         if (slv_reg_wren = '1') then
           case loc_addr is
             when b"00" =>
@@ -299,7 +322,7 @@ begin
         axi_rvalid <= '0';
         axi_rresp  <= "00";
       else
-        if (axi_arready = '1' and S_AXI_ARVALID = '1' and axi_rvalid = '0') then
+        if (axi_arready = '1' and S_AXI_ARVALID = '1' and axi_rvalid = '0' and hold_for_slv_reg2 = '0') then
           -- Valid read data is available at the read data bus
           axi_rvalid <= '1';
           axi_rresp  <= "00"; -- 'OKAY' response
@@ -321,12 +344,18 @@ begin
   begin
     -- Address decoding for reading registers
     loc_addr := axi_araddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB);
+    hold_for_slv_reg2 <= '0'; -- reset hold flag
     case loc_addr is
       when b"00" =>
         reg_data_out <= slv_reg0;
       when b"01" =>
         reg_data_out <= slv_reg1;
       when b"10" =>
+        if STD_LOGIC_VECTOR(reg2_invalid_cnt) /= "000" then
+          hold_for_slv_reg2 <= '1';
+        else
+          hold_for_slv_reg2 <= '0';
+        end if;
         reg_data_out <= slv_reg2;
       when b"11" =>
         reg_data_out <= slv_reg3;

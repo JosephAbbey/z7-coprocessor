@@ -32,6 +32,11 @@
 #define FLOAT_MULTIPLIER_BASEADDR_B FLOAT_MULTIPLIER_BASEADDR + OPPERATION_B
 #define FLOAT_MULTIPLIER_BASEADDR_O FLOAT_MULTIPLIER_BASEADDR + OPPERATION_O
 
+#define FLOAT_DIVIDER_BASEADDR XPAR_FLOAT_DIVIDER_0_BASEADDR
+#define FLOAT_DIVIDER_BASEADDR_A FLOAT_DIVIDER_BASEADDR + OPPERATION_A
+#define FLOAT_DIVIDER_BASEADDR_B FLOAT_DIVIDER_BASEADDR + OPPERATION_B
+#define FLOAT_DIVIDER_BASEADDR_O FLOAT_DIVIDER_BASEADDR + OPPERATION_O
+
 #define FLOAT_RANDOM_BASEADDR XPAR_FLOAT_RANDOM_0_BASEADDR
 #define FLOAT_RANDOM_BASEADDR_O FLOAT_RANDOM_BASEADDR + OPPERATION_O
 
@@ -67,8 +72,8 @@ int main() {
     //     usleep(10000);
     // }
     
-    float a = 2.0f;
-    float b = 10.0f;
+    float a = 1.0f;
+    float b = 3.0f;
 
     xil_printf("##########################################################\r\n");
     xil_printf("#\r\n");
@@ -119,6 +124,34 @@ int main() {
     xil_printf("A: %x\t", Xil_In32(FLOAT_MULTIPLIER_BASEADDR_A));
     xil_printf("B: %x\t", Xil_In32(FLOAT_MULTIPLIER_BASEADDR_B));
     xil_printf("O: %x\t", Xil_In32(FLOAT_MULTIPLIER_BASEADDR_O));
+    xil_printf("\r\n");
+    
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+    xil_printf("\r\n");
+
+    xil_printf("##########################################################\r\n");
+    xil_printf("#\r\n");
+    xil_printf("# DIVIDER: \r\n");
+    xil_printf("#\r\n");
+    xil_printf("##########################################################\r\n");
+    xil_printf("\r\n");
+    
+    xil_printf("On ARM:\r\n");
+    xil_printf("A: %x\t", to_bits(a));
+    xil_printf("B: %x\t", to_bits(b));
+    xil_printf("O: %x\t", to_bits(a / b));
+    xil_printf("\r\n");
+
+    Xil_Out32(FLOAT_DIVIDER_BASEADDR_A, to_bits(a));
+    Xil_Out32(FLOAT_DIVIDER_BASEADDR_B, to_bits(b));
+
+    xil_printf("On FPGA:\r\n");
+    xil_printf("A: %x\t", Xil_In32(FLOAT_DIVIDER_BASEADDR_A));
+    xil_printf("B: %x\t", Xil_In32(FLOAT_DIVIDER_BASEADDR_B));
+    xil_printf("O: %x\t", Xil_In32(FLOAT_DIVIDER_BASEADDR_O));
     xil_printf("\r\n");
     
     xil_printf("\r\n");

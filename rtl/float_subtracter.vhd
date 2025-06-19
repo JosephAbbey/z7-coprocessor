@@ -7,8 +7,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 library work;
+use work.float_pkg.all;
 
-entity float_random is
+entity float_subtracter is
   port (
     -- Global Clock Signal
     S_AXI_ACLK    : in  STD_LOGIC;
@@ -59,9 +60,10 @@ entity float_random is
     -- accept the read data and response information.
     S_AXI_RREADY  : in  STD_LOGIC
   );
-end float_random;
+end float_subtracter;
 
-architecture arch_imp of float_random is
+architecture arch_imp of float_subtracter
+  is
 
   -- AXI4LITE signals
   signal axi_awaddr          : STD_LOGIC_VECTOR(31 downto 0);
@@ -98,12 +100,7 @@ architecture arch_imp of float_random is
 
 begin
 
-  rnd_inst : entity work.random
-    port map(
-      clk => S_AXI_ACLK,
-      rst => not S_AXI_ARESETN,
-      rnd => slv_reg2
-    );
+  slv_reg2      <= STD_LOGIC_VECTOR(my_float(slv_reg0) - my_float(slv_reg1));
 
   -- I/O Connections assignments
 
