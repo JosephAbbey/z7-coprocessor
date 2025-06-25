@@ -117,12 +117,12 @@ architecture rtl of pipeline_divider is
   function pack(s : stage_rec) return my_float is
   begin
     if s.skip = '1' then
-      return s.sign & STD_LOGIC_VECTOR(s.exp) & s.mfull(22 downto 0);
+      return my_float(s.sign & STD_LOGIC_VECTOR(s.exp) & s.mfull(22 downto 0)); -- for some reason xsim does not like the return type, thus the cast
     end if;
 
     if s.mfull(23) = '1' then
       -- Simple case where the output is already normalised
-      return s.sign & STD_LOGIC_VECTOR(s.exp) & s.mfull(22 downto 0);
+      return my_float(s.sign & STD_LOGIC_VECTOR(s.exp) & s.mfull(22 downto 0)); -- for some reason xsim does not like the return type, thus the cast
     else
       -- If the output requires a lower exponent to be normalised
       for I in 22 downto 0 loop

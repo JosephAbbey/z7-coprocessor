@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="test_float_sqrt_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="float_pkg" />
+            <top_module name="glbl" />
+            <top_module name="test_float_sqrt" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="166.666 ns"></ZoomStartTime>
+      <ZoomEndTime time="1,166.667 ns"></ZoomEndTime>
+      <Cursor1Time time="1,000.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="533"></NameColumnWidth>
+      <ValueColumnWidth column_width="259"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="33" />
+   <wvobject fp_name="/test_float_sqrt/S_AXI_ACLK" type="logic">
+      <obj_property name="ElementShortName">S_AXI_ACLK</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_ACLK</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_ARESETN" type="logic">
+      <obj_property name="ElementShortName">S_AXI_ARESETN</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_ARESETN</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_AWADDR" type="array">
+      <obj_property name="ElementShortName">S_AXI_AWADDR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_AWADDR[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_AWVALID" type="logic">
+      <obj_property name="ElementShortName">S_AXI_AWVALID</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_AWVALID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_AWREADY" type="logic">
+      <obj_property name="ElementShortName">S_AXI_AWREADY</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_AWREADY</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_WDATA" type="array">
+      <obj_property name="ElementShortName">S_AXI_WDATA[31:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_WDATA[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_WVALID" type="logic">
+      <obj_property name="ElementShortName">S_AXI_WVALID</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_WVALID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_WREADY" type="logic">
+      <obj_property name="ElementShortName">S_AXI_WREADY</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_WREADY</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_BRESP" type="array">
+      <obj_property name="ElementShortName">S_AXI_BRESP[1:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_BRESP[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_BVALID" type="logic">
+      <obj_property name="ElementShortName">S_AXI_BVALID</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_BVALID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_BREADY" type="logic">
+      <obj_property name="ElementShortName">S_AXI_BREADY</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_BREADY</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_ARADDR" type="array">
+      <obj_property name="ElementShortName">S_AXI_ARADDR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_ARADDR[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_ARVALID" type="logic">
+      <obj_property name="ElementShortName">S_AXI_ARVALID</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_ARVALID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_ARREADY" type="logic">
+      <obj_property name="ElementShortName">S_AXI_ARREADY</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_ARREADY</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_RDATA" type="array">
+      <obj_property name="ElementShortName">S_AXI_RDATA[31:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_RDATA[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_RRESP" type="array">
+      <obj_property name="ElementShortName">S_AXI_RRESP[1:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_RRESP[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_RVALID" type="logic">
+      <obj_property name="ElementShortName">S_AXI_RVALID</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_RVALID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/S_AXI_RREADY" type="logic">
+      <obj_property name="ElementShortName">S_AXI_RREADY</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_RREADY</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/slv_reg0" type="array">
+      <obj_property name="ElementShortName">slv_reg0[31:0]</obj_property>
+      <obj_property name="ObjectShortName">slv_reg0[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/slv_reg2" type="array">
+      <obj_property name="ElementShortName">slv_reg2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">slv_reg2[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/q_valid" type="logic">
+      <obj_property name="ElementShortName">q_valid</obj_property>
+      <obj_property name="ObjectShortName">q_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/hold_for_slv_reg2" type="logic">
+      <obj_property name="ElementShortName">hold_for_slv_reg2</obj_property>
+      <obj_property name="ObjectShortName">hold_for_slv_reg2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/sqrt_inst/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/sqrt_inst/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/sqrt_inst/new_a" type="logic">
+      <obj_property name="ElementShortName">new_a</obj_property>
+      <obj_property name="ObjectShortName">new_a</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/sqrt_inst/a" type="array">
+      <obj_property name="ElementShortName">a[31:0]</obj_property>
+      <obj_property name="ObjectShortName">a[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/sqrt_inst/q" type="array">
+      <obj_property name="ElementShortName">q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">q[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/sqrt_inst/valid" type="logic">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/sqrt_inst/x_n" type="array">
+      <obj_property name="ElementShortName">x_n[31:0]</obj_property>
+      <obj_property name="ObjectShortName">x_n[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/sqrt_inst/frac" type="array">
+      <obj_property name="ElementShortName">frac[31:0]</obj_property>
+      <obj_property name="ObjectShortName">frac[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/sqrt_inst/frac_invalid_cnt" type="array">
+      <obj_property name="ElementShortName">frac_invalid_cnt[2:0]</obj_property>
+      <obj_property name="ObjectShortName">frac_invalid_cnt[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/sqrt_inst/root_invalid_cnt" type="array">
+      <obj_property name="ElementShortName">root_invalid_cnt[3:0]</obj_property>
+      <obj_property name="ObjectShortName">root_invalid_cnt[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_float_sqrt/dut/sqrt_inst/q_valid" type="logic">
+      <obj_property name="ElementShortName">q_valid</obj_property>
+      <obj_property name="ObjectShortName">q_valid</obj_property>
+   </wvobject>
+</wave_config>

@@ -20,6 +20,7 @@ package float_pkg is
 
   constant ZERO       : my_float := (others => '0');
   constant ONE        : my_float := "00111111100000000000000000000000"; -- 1.0 in IEEE 754 format
+  constant HALF       : my_float := "00111111000000000000000000000000";
 
   constant NaN        : my_float := "01111111111111111111111111111111"; -- Not a Number (NaN)
   constant INF        : my_float := "00000000000000000000000011111111"; -- Infinity
@@ -167,7 +168,7 @@ package body float_pkg is
       return (others => '0');
     else
       -- Simple case where the output is already normalised
-      return sign & a_exp & overflow_man(22 downto 0);
+      return my_float(sign & a_exp & overflow_man(22 downto 0)); -- for some reason xsim does not like the return type, thus the cast
     end if;
   end function safe_add;
 
@@ -234,7 +235,7 @@ package body float_pkg is
       return sign & a(30 downto 0);
     end if;
     if b_exp = fill('1', 8) then
-      return sign & b(30 downto 0);
+      return my_float(sign & b(30 downto 0)); -- for some reason xsim does not like the return type, thus the cast
     end if;
 
     -- (a1 * 2^a2) * (b1 * 2^b2) = (a1 * b1) * 2^(a2 + b2) = (a1 * b1) * 2^(a2 + b2)
@@ -263,7 +264,7 @@ package body float_pkg is
       man := STD_LOGIC_VECTOR(man_sum(22 downto 0));
     end if;
 
-    return sign & STD_LOGIC_VECTOR(exp) & man;
+    return my_float(sign & STD_LOGIC_VECTOR(exp) & man); -- for some reason xsim does not like the return type, thus the cast
 
   end function "*";
 

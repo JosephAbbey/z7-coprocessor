@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "rtl"
+		},
+		{
+			"path": "docs"
+		},
+		{
+			"path": "vitis/app_component/src"
+		}
+	],
+	"settings": {}
+}
