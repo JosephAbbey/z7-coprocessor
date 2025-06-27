@@ -52,36 +52,36 @@ begin
     variable x_n1 : my_float;
   begin
     if rising_edge(clk) then
-      q       <= (others => '0');
-      q_valid <= '0';
       if rst = '1' or new_a = '1' then
         x_n              <= ONE;
         frac_invalid_cnt <= to_unsigned(7, 3);
         root_invalid_cnt <= to_unsigned(15, 4);
+        q       <= (others => '0');
+        q_valid <= '0';
       else
-        if q_valid = '0' then
-          if STD_LOGIC_VECTOR(frac_invalid_cnt) = "000" then
-            frac_invalid_cnt <= to_unsigned(7, 3);
-            -- this should minimize away the mantissa part of the
-            -- multiplier and just decrement the exponent
-            x_n1 := HALF * (x_n + frac);
+        if STD_LOGIC_VECTOR(frac_invalid_cnt) = "000" then
+          frac_invalid_cnt <= to_unsigned(7, 3);
+          -- this should minimize away the mantissa part of the
+          -- multiplier and just decrement the exponent
+          x_n1 := HALF * (x_n + frac);
 
-            if STD_LOGIC_VECTOR(root_invalid_cnt) = "0000" or x_n1 = x_n then
-              q       <= x_n1;
-              q_valid <= '1';
-            else
-              root_invalid_cnt <= root_invalid_cnt - 1;
-            end if;
-          else
-            frac_invalid_cnt <= frac_invalid_cnt - 1;
-            x_n1 := x_n;
-          end if;
-          x_n <= x_n1;
-
-          if a(31) = '1' then -- Negative input
-            q       <= NaN;
+          -- The value will be valid after 15 iterations, but will continue
+          -- to improve until a new input is given.
+          if STD_LOGIC_VECTOR(root_invalid_cnt) = "0000" or x_n1 = x_n then
+            q       <= x_n1;
             q_valid <= '1';
+          else
+            root_invalid_cnt <= root_invalid_cnt - 1;
           end if;
+        else
+          frac_invalid_cnt <= frac_invalid_cnt - 1;
+          x_n1 := x_n;
+        end if;
+        x_n <= x_n1;
+
+        if a(31) = '1' then -- Negative input
+          q       <= NaN;
+          q_valid <= '1';
         end if;
       end if;
     end if;
