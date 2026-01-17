@@ -234,5 +234,88 @@ int main() {
   // }
   // xil_printf("done");
 
+  xil_printf("##########################################################\r\n");
+  xil_printf("#\r\n");
+  xil_printf("# Calculate PI: \r\n");
+  xil_printf("#\r\n");
+  xil_printf("##########################################################\r\n");
+  xil_printf("\r\n");
+
+  // Calculate PI using the Leibniz formula:
+  // pi = 4 * (1 - 1/3 + 1/5 - 1/7 + 1/9 - ...)
+  float pi = 0.0f;
+  int sign = 0;
+  for (int i = 0; i < 1000000; i++) {
+    Xil_Out32(FLOAT_DIVIDER_BASEADDR_A, to_bits(2.0f * i + 1.0f));
+    if (sign == 1) {
+      sign = 0;
+      Xil_Out32(FLOAT_ADDER_BASEADDR_A, to_bits(pi));
+      Xil_Out32(FLOAT_ADDER_BASEADDR_B, Xil_In32(FLOAT_DIVIDER_BASEADDR_O));
+      pi = to_float(Xil_In32(FLOAT_ADDER_BASEADDR_O));
+    } else {
+      sign = 1;
+      Xil_Out32(FLOAT_ADDER_BASEADDR_A, to_bits(pi));
+      Xil_Out32(FLOAT_ADDER_BASEADDR_B, -Xil_In32(FLOAT_DIVIDER_BASEADDR_O));
+      pi = to_float(Xil_In32(FLOAT_ADDER_BASEADDR_O));
+    }
+  }
+  Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_A, to_bits(pi));
+  Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_B, to_bits(4.0f));
+  pi = to_float(Xil_In32(FLOAT_MULTIPLIER_BASEADDR_O));
+  xil_printf("Calculated PI (Leibniz): %x\r\n", to_bits(pi));
+
+  // Calculate PI using using circle area method
+  // 1. Generate random points in a square of side length 2
+  // 2. Count how many points fall inside the circle of radius 1
+  // 3. The ratio of points inside the circle to total points is
+  //    approximately pi/4
+  int inside_circle = 0;
+  int total_points = 1000000;  // Number of random points to generate
+  for (int i = 0; i < total_points; i++) {
+    // Generate random x and y coordinates in the range [-1, 1]
+    // x = 2 * rnd - 1;
+    Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_A, Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_B, to_bits(2.0f));
+    Xil_Out32(FLOAT_ADDER_BASEADDR_A, to_bits(-1.0f));
+    Xil_Out32(FLOAT_ADDER_BASEADDR_B, Xil_In32(FLOAT_MULTIPLIER_BASEADDR_O));
+    float x = Xil_In32(FLOAT_ADDER_BASEADDR_O);
+    // y = 2 * rnd - 1;
+    Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_A, Xil_In32(FLOAT_RANDOM_BASEADDR_O));
+    Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_B, to_bits(2.0f));
+    Xil_Out32(FLOAT_ADDER_BASEADDR_A, to_bits(-1.0f));
+    Xil_Out32(FLOAT_ADDER_BASEADDR_B, Xil_In32(FLOAT_MULTIPLIER_BASEADDR_O));
+    float y = Xil_In32(FLOAT_ADDER_BASEADDR_O);
+
+    // use sqrt to check if the point is inside the circle
+    Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_A, to_bits(x));
+    Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_B, to_bits(x));
+    Xil_Out32(FLOAT_ADDER_BASEADDR_A, Xil_In32(FLOAT_MULTIPLIER_BASEADDR_O));
+    Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_A, to_bits(y));
+    Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_B, to_bits(y));
+    Xil_Out32(FLOAT_ADDER_BASEADDR_B, Xil_In32(FLOAT_MULTIPLIER_BASEADDR_O));
+    // Sqrt is actually completely unnecessary, but I want to use it!
+    Xil_Out32(FLOAT_SQRT_BASEADDR_A, Xil_In32(FLOAT_ADDER_BASEADDR_O));
+    float distance = to_float(Xil_In32(FLOAT_SQRT_BASEADDR_O));
+    // Should use my own comparison at some point
+    if (distance <= 1.0f) {
+      inside_circle++;
+    }
+  }
+  // Calculate pi using the ratio of points inside the circle to total points
+  Xil_Out32(FLOAT_DIVIDER_BASEADDR_A, to_bits(inside_circle));
+  Xil_Out32(FLOAT_DIVIDER_BASEADDR_B, to_bits(total_points));
+  Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_A, to_bits(4.0f));
+  Xil_Out32(FLOAT_MULTIPLIER_BASEADDR_B, Xil_In32(FLOAT_DIVIDER_BASEADDR_O));
+  xil_printf("Calculated PI (Circle Area): %x\r\n",
+             Xil_In32(FLOAT_MULTIPLIER_BASEADDR_O));
+
+  xil_printf("\r\n");
+  xil_printf("\r\n");
+  xil_printf("\r\n");
+  xil_printf("\r\n");
+  xil_printf("\r\n");
+
+  Xil_Out32(LEDS_BASEADDR, 0x1);
+
   return 0;
 }
