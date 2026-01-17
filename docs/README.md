@@ -104,17 +104,19 @@ Special cases:
 
 *This is my own design and implementation, this is not standard and not the most efficient.* However, I do not take credit for the concept, this has been a standard method of generating pseudo-random numbers in hardware for a long time.
 
-A simple linear feedback shift register (LFSR) based random number generator.
+A simple linear feedback shift register (LFSR) based pseudo random number generator.
 
 Inspired by [scrartch_vhdl](https://house-of-abbey.github.io/scratch_vhdl/lfsr.html).
 
 Using a 28-bit LFSR with the polynomial $x^{28} + x^{25} + 1$ (prime polynomial from [University of Otago](https://www.physics.otago.ac.nz/reports/electronics/ETR2012-1.pdf)). So that is pretty random.
 
-The LFSR is instantiated 23 times, each piped into the next, to give a set of 23 random bits each clock cycle.
+The LFSR is instantiated 23 times, each piped into the next, to give a set of 23 random bits each clock cycle. This essentially means that 23 iterations of the lfsr are run each clock cycle.
 
 Those 23 bits as the mantissa, an exponent of "01111111" (which is 127 in decimal, but 0 with the bias), and a sign bit of 0 (positive) for a number between 1 and 2.
 
 Subtract 1 to get a number between 0 and 1.
+
+The seed is fixed in the VHDL file, but as a random number is generated every cycle, and the PS and PL are seperated and not synced, the generated numbers after a certain number of PS clock cycles will differ based on many factors (temperature, mains voltage, ...). So the numbers are actually reasonably random unintentionally.
 
 The random number is quite uniform, but not perfectly random. The distribution is shown below.
 
