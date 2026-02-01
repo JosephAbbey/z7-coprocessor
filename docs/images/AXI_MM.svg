@@ -1,8 +1,3 @@
-<!-- --------------------------------------------------------------------------------- -->
-<!--  Distributed under MIT Licence -->
-<!--    See https://github.com/josephabbey/z7-coprocessor/blob/main/LICENCE. -->
-<!-- --------------------------------------------------------------------------------- -->
-
 <svg xmlns="http://www.w3.org/2000/svg" direction="ltr" width="1011.4527771274442" height="654" viewBox="-294.9166897306387 378 1011.4527771274442 654" stroke-linecap="round" stroke-linejoin="round" style="background-color: #1e1e2e;" data-color-mode="dark" class="tl-container tl-theme__force-sRGB tl-theme__dark"><defs><mask id="_export_1_r_2sf_"><rect x="0" y="0" width="8" height="8" fill="white"/><g stroke-linecap="round" stroke="black"><line x1="0.6666666666666666" y1="2" x2="2" y2="0.6666666666666666"/><line x1="3.333333333333333" y1="4.666666666666666" x2="4.666666666666666" y2="3.333333333333333"/><line x1="6" y1="7.333333333333333" x2="7.333333333333333" y2="6"/></g></mask><pattern id="_export_1_r_2se__hash_pattern_dark_0" width="8" height="8" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="8" height="8" fill="#010403" mask="url(#_export_1_r_2sf_)"/></pattern><style>@font-face {
   font-family: "tldraw_draw";
   font-weight: normal;
