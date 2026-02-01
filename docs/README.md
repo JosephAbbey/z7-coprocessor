@@ -7,6 +7,8 @@
 
 A coprocessor for the Zybo Z7-10 board, providing functionality for floating point operations.
 
+This project was for my own education, a write up of why I implemented things the way that I have can be found [here](narative.md).
+
 ## Architecture
 
 The Architecture is simple. The PS is connected to the PL via the AXI bus. All of the *modules* are a separate AXI MM slave, which is connected to the AXI bus. The PS can access the modules via the AXI bus, by using *magic memory addresses* (any address on the bus is equivalent to the same address in memory).
