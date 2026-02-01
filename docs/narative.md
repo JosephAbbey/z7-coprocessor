@@ -1,3 +1,8 @@
+<!-- --------------------------------------------------------------------------------- -->
+<!--  Distributed under MIT Licence -->
+<!--    See https://github.com/josephabbey/z7-coprocessor/blob/main/LICENCE. -->
+<!-- --------------------------------------------------------------------------------- -->
+
 # Building an FPGA Coprocessor
 
 This document describes the process of building a simple FPGA coprocessor for floating point operations on the Zybo Z7-10 board. This coprocessor is not defined to provide high performance, but rather to illustrate the concepts involved in creating a custom coprocessor using SOC FPGA and floating point numbers.
