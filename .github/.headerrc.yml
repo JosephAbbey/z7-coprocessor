@@ -4,6 +4,7 @@ file_mode: opt-out
 untracked_files:
   - bd/top/hdl/top_wrapper.vhd
   - .github/.*
+  - *.svg
 
 header: |
   ---------------------------------------------------------------------------------
