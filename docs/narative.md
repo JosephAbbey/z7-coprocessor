@@ -936,6 +936,8 @@ end architecture rtl;
 
 Throughout the development, I tested random cases and expected edge cases on both the simulator and the FPGA hardware. The simulator allowed for quick iteration and debugging, while the FPGA testing ensured that the design worked correctly in real hardware.
 
+All of the testing code is found in [`/vitis/app_component/src/main.c`](../vitis/app_component/src/main.c)
+
 ### Big Calculation
 
 #### Calculating π
